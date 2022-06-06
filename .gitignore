@@ -1,7 +1,7 @@
 installationScripts/Executable
 installationScripts/Output
 documentosPDF/
-auxFiles/
+auxFiles/*.pt
 
 
 
@@ -13,7 +13,6 @@ __pycache__/
 *.pt
 # C extensions
 *.so
-auxFiles/
 
 # Distribution / packaging
 .Python
