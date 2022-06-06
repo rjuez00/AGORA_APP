@@ -1,0 +1,10 @@
+PyQt5
+PyQtWebEngine
+mpld3
+folium
+xlsxwriter
+fitz
+PyMuPDF
+numpy
+python-docx
+googlemaps

@@ -1,0 +1,2 @@
+1.- execute exe_creation.bat
+2.- generate inno_script.iss with Inno Setup and remember to put all the dist folder included and change the target folder
