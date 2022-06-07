@@ -57,6 +57,7 @@ class MainWindow(QMainWindow):
 
     def closeEvent(self, event):
         if self.check_freeze():
+            event.ignore()
             return
 
         if QMessageBox.question(self, 'Save project', "Do you want to save the project changes?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No) == QMessageBox.Yes:

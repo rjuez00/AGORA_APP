@@ -20,8 +20,9 @@ class GeoWidget(QWidget):
         self.loadMapButton.clicked.connect(self.loadMap)
         with open(utils.resource_path("auxFiles/geoPlaceHolder.html")) as f:
             geoPlaceHolder = f.read()
-        self.mapWebWidget.setHtml(geoPlaceHolder)
+        #self.mapWebWidget.setHtml(geoPlaceHolder)
         self.cacheMaps = dict(zip(self.mainWindow.projectLoaded.keys(), [None] * len(self.mainWindow.projectLoaded)))
+        self.mapProgressBar.hide()
 
 
 
@@ -65,15 +66,19 @@ class GeoWidget(QWidget):
         
         return True
 
-    def finishLoadingMap(self):
-        newmap = self.mapGenerator.getHtmlMap()    
-        if newmap == None:
-            with open(utils.resource_path("auxFiles/noMapAvailable.html")) as f:
-                newmap = f.read()
-
+    def finishLoadingMap(self, cachedMap = None):
+        if cachedMap == None:
+            newmap = self.mapGenerator.getHtmlMap()    
+            if newmap == None:
+                with open(utils.resource_path("auxFiles/noMapAvailable.html")) as f:
+                    newmap = f.read()
+        else:
+            newmap = cachedMap
         print("TERMINADO\n")
         self.mapWebWidget.setHtml(newmap)
         self.loadMapButton.show()
+        self.radiusBox.show()
+
         self.cacheMaps[self.loadingMapDocumentName] = {'html': newmap, 'streets': self.loadingMapStreetChecks}
 
     def updateMapProgressBar(self, progress):
@@ -102,12 +107,14 @@ class GeoWidget(QWidget):
         
         
         self.loadMapButton.hide()
+        self.radiusBox.hide()
+
         self.mapGenerator = Statmap(self.streetsSelected.copy(), self.radiusBox.value())
         
         self.loadingMapDocumentName = self.documentCurrentlySelected
         self.loadingMapStreetChecks = self.streetsSelected
         
-  
+        self.mapProgressBar.show()
        
         self.worker = utils.LoadMap(self.mapGenerator, parent = self.mainWindow)
         self.worker.worker_complete.connect(self.finishLoadingMap)
