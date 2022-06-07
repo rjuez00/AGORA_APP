@@ -2,8 +2,8 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "AGORA"
-#define MyAppVersion "0.1a"
-#define MyAppPublisher "Rodrigo Juez"
+#define MyAppVersion "0.5"
+#define MyAppPublisher "Rodrigo Juez Hernández"
 #define MyAppExeName "AGORA.exe"
 #define MyAppAssocName MyAppName + " File"
 #define MyAppAssocExt ".agora"
@@ -36,8 +36,8 @@ Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "D:\TFG_VAULT\00FINAL_FOLDER\TFG_UI\installationScripts\Executable\dist\AGORA\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\TFG_VAULT\00FINAL_FOLDER\TFG_UI\installationScripts\Executable\dist\AGORA\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "D:\TFG_VAULT\AGORA\APP\installationScripts\Executable\dist\AGORA\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "D:\TFG_VAULT\AGORA\APP\installationScripts\Executable\dist\AGORA\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]
