@@ -35,13 +35,6 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="1" column="0">
-       <widget class="QListWidget" name="listaDocsWidget">
-        <property name="mouseTracking">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0">
        <widget class="QLabel" name="documentsLabel">
         <property name="font">
@@ -87,6 +80,13 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="0">
+       <widget class="QListWidget" name="listaDocsWidget">
+        <property name="mouseTracking">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
@@ -99,6 +99,13 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
+      <item row="1" column="0" colspan="6">
+       <widget class="QListWidget" name="listaFiltersWidget">
+        <property name="mouseTracking">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
       <item row="8" column="5">
        <widget class="QPushButton" name="exportFiltersButton">
         <property name="font">
@@ -143,16 +150,6 @@ Excel</string>
          <set>Qt::AlignCenter</set>
         </property>
        </widget>
-      </item>
-      <item row="1" column="0" colspan="6">
-       <widget class="QListWidget" name="listaFiltersWidget">
-        <property name="mouseTracking">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="0">
-       <widget class="QLineEdit" name="directoryExcelLineEdit"/>
       </item>
       <item row="8" column="1">
        <widget class="QToolButton" name="excelDirectoryButton">
@@ -206,6 +203,9 @@ Excel</string>
         </property>
        </widget>
       </item>
+      <item row="8" column="0">
+       <widget class="QLineEdit" name="directoryExcelLineEdit"/>
+      </item>
      </layout>
     </widget>
    </item>
@@ -236,6 +236,20 @@ Excel</string>
         </property>
        </widget>
       </item>
+      <item row="5" column="3" colspan="2">
+       <widget class="QPushButton" name="exportAnonDocumentsButton">
+        <property name="font">
+         <font>
+          <family>MS Shell Dlg 2</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Export Documents
+Anonymized</string>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="0" rowspan="2" colspan="5">
        <widget class="QPushButton" name="generateAnonButton">
         <property name="font">
@@ -259,27 +273,6 @@ Excel</string>
         </property>
         <property name="text">
          <string>dir...</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="3" colspan="2">
-       <widget class="QPushButton" name="exportAnonDocumentsButton">
-        <property name="font">
-         <font>
-          <family>MS Shell Dlg 2</family>
-          <pointsize>10</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Export Documents
-Anonymized</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="5">
-       <widget class="QListWidget" name="listaAnonWidget">
-        <property name="mouseTracking">
-         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -325,34 +318,14 @@ Anonymized</string>
         </property>
        </widget>
       </item>
+      <item row="1" column="0" colspan="5">
+       <widget class="QListWidget" name="listaAnonWidget">
+        <property name="mouseTracking">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
      </layout>
-     <widget class="QLabel" name="labelGeneralAnon">
-      <property name="enabled">
-       <bool>true</bool>
-      </property>
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>390</y>
-        <width>211</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>Yu Gothic UI Semibold</family>
-        <pointsize>16</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>Filtering Loading</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
     </widget>
    </item>
   </layout>

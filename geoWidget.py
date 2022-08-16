@@ -78,6 +78,7 @@ class GeoWidget(QWidget):
         self.mapWebWidget.setHtml(newmap)
         self.loadMapButton.show()
         self.radiusBox.show()
+        self.mapProgressBar.hide()
 
         self.cacheMaps[self.loadingMapDocumentName] = {'html': newmap, 'streets': self.loadingMapStreetChecks}
 

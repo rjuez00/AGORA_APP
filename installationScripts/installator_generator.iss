@@ -26,7 +26,6 @@ OutputBaseFilename=mysetup
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
-DiskSpanning=yes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -36,8 +35,8 @@ Name: "spanish"; MessagesFile: "compiler:Languages\Spanish.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "D:\TFG_VAULT\AGORA\APP\installationScripts\Executable\dist\AGORA\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "D:\TFG_VAULT\AGORA\APP\installationScripts\Executable\dist\AGORA\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "Z:\TFG_VAULT\AGORA\APP\installationScripts\Executable\dist\AGORA\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "Z:\TFG_VAULT\AGORA\APP\installationScripts\Executable\dist\AGORA\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Registry]

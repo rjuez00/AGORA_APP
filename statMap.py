@@ -56,7 +56,7 @@ class Statmap():
         self.summaries = {}
         for idx, (address, (coordinates, _)) in enumerate(self.addresses.items()):
             if coordinates != None:  
-                self.summaries[address] = geocoding.herramienta_radio(coordinates, self.radius)    
+                self.summaries[address] = (coordinates, geocoding.herramienta_radio(coordinates, self.radius) )   
             if worker_progress != None:
                 worker_progress.emit((idx/len(self.addresses))*100)
             
@@ -77,8 +77,8 @@ class Statmap():
                 
         m = Map(location=centerCoordinates,  zoom_start=15)
 
-
-        for address, (labels, sizes) in self.summaries.items():
+        print(self.summaries)
+        for address, (coordinates, (labels, sizes)) in self.summaries.items():
             Marker(location=coordinates, popup=IFrame(html=geocoding.html_barplot_summary_amenities(address, labels, sizes), width=800, height=400).render()).add_to(m)
 
  

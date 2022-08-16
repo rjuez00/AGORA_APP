@@ -1,4 +1,4 @@
-import time, os
+import time, os, utils
 
 storage_models = "auxFiles"
 entities_model = ["CALLE", "LUGAR_GENERAL", "NOMBRE_PERSONA"]
@@ -9,7 +9,7 @@ def filter_flair(contentdict):
     import flair, torch
     flair.device = torch.device('cpu') 
 
-    flairTagger = SequenceTagger.load(storage_models + "/nermodel.pt")
+    flairTagger = SequenceTagger.load(utils.resource_path(storage_models + "/nermodel.pt"))
     
     for documentName in contentdict.keys():
         print("FILTERING:", documentName)

@@ -31,7 +31,7 @@ class AnonWidget(QWidget):
         uic.loadUi(aux.resource_path("auxFiles/anon.ui"),self)
         self.mainWindow = mainWindow
 
-        [i.hide()  for i in [self.progressBarDocuments, self.labelGeneralFilterIcon, self.labelGeneralAnon, self.labelGeneralAnonIcon]]
+        [i.hide()  for i in [self.progressBarDocuments, self.labelGeneralFilterIcon, self.labelGeneralAnonIcon]]
 
         
         #LOAD FILTERS and ANONYMIZIERS TO APPLY
@@ -233,7 +233,7 @@ class AnonWidget(QWidget):
     def finalThreadAnonFunction(self):           
         self.mainWindow.stop_interaction(False)
         [i.show() for i in [self.generateAnonButton, self.exportAnonDocumentsButton]]
-        [i.hide()  for i in [self.labelGeneralAnon, self.labelGeneralAnonIcon]]
+        [i.hide()  for i in [self.labelGeneralAnonIcon]]
 
     def generateAnon(self):
         if self.mainWindow.check_freeze():
@@ -258,7 +258,7 @@ class AnonWidget(QWidget):
         # prepare to start process
         self.mainWindow.stop_interaction(True)
         [i.hide() for i in [self.generateAnonButton, self.exportAnonDocumentsButton]]
-        [i.show()  for i in [self.labelGeneralAnon, self.labelGeneralAnonIcon]]
+        [i.show()  for i in [self.labelGeneralAnonIcon]]
         self.loadingIconAnon.start()
 
         self.thread = Thread(target = aux.applyAnonFunction, args = (self.mainWindow.projectLoaded, self.anon_functions_selected, self.finalThreadAnonFunction) )
@@ -271,12 +271,12 @@ class AnonWidget(QWidget):
             QMessageBox.about(self, "Directory Error", "Please specify a directory to save the anonymized documents...")
             return
         if self.mainWindow.projectLoaded[list(self.mainWindow.projectLoaded.keys())[0]].get("deidentified", None) == None:
-            QMessageBox.about(self, "Not yet deidentified", "Please select the deidentifiers and press the button 'Generate Anonymization' then you will be able to export the deidentified documents")
+            QMessageBox.about(self, "Not yet anonymized", "Please select the anonymizers and press the button 'Generate Anonymization' then you will be able to export the anonymized documents")
             return
 
         self.mainWindow.stop_interaction(True)
         [i.hide() for i in [self.generateAnonButton, self.exportAnonDocumentsButton]]
-        [i.show()  for i in [self.labelGeneralAnon, self.labelGeneralAnonIcon]]
+        [i.show()  for i in [self.labelGeneralAnonIcon]]
         self.loadingIconAnon.start()
         
         self.thread = Thread(target = tbw.wordWriterFunction, args = (self.mainWindow.projectLoaded, self.directoryAnonLineEdit.text(), self.finalThreadAnonFunction) )

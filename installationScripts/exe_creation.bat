@@ -1,6 +1,8 @@
 @echo off
 
 rmdir Executable /s /q 
+rmdir Output /s /q 
+
 mkdir Executable
 cd Executable
 
@@ -12,3 +14,6 @@ pyinstaller --onedir --noconsole --add-data="../../auxFiles/*;auxFiles" --icon="
 : Xcopy ..\..\auxFiles dist\auxFiles /I
 
 cd ..
+
+
+iscc installator_generator.iss
