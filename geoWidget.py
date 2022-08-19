@@ -69,7 +69,7 @@ class GeoWidget(QWidget):
     def finishLoadingMap(self, cachedMap = None):
         if cachedMap == None:
             newmap = self.mapGenerator.getHtmlMap()    
-            if newmap == None:
+            if newmap == None:  
                 with open(utils.resource_path("auxFiles/noMapAvailable.html")) as f:
                     newmap = f.read()
         else:

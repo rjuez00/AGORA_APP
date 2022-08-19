@@ -42,6 +42,18 @@ class AnonWidget(QWidget):
         #BUTTON ASIGNATION
         self.buttonAssignation()
 
+        self.excelFormats = {"Two Row": tbw.two_row_format, "Format Lara": tbw.format_lara}
+        self.outputFormatSelector.clear()
+        for format_name in self.excelFormats:
+            self.outputFormatSelector.addItem(format_name)
+
+
+        self.wordFormats = {"Replace Type": tbw.replace_with_category_word, "Replace X": tbw.replace_with_x_word, "Remove Completely": tbw.remove_completely_word}
+        self.anonymizationFormatSelector.clear()
+        for format_name in self.wordFormats:
+            self.anonymizationFormatSelector.addItem(format_name)
+
+
 
     def buttonAssignation(self):
         #DOCUMENTS
@@ -196,8 +208,8 @@ class AnonWidget(QWidget):
         [i.show()  for i in [ self.labelGeneralFilterIcon]]
         self.loadingIconFilter.start()
 
-    
-        self.thread = Thread(target = tbw.excelWriterFunction, args = (self.mainWindow.projectLoaded, self.directoryExcelLineEdit.text(), self.finalThreadFilterFunction) )
+        
+        self.thread = Thread(target = tbw.excelWriterFunction, args = (self.excelFormats[self.outputFormatSelector.currentText()], self.mainWindow.projectLoaded, self.directoryExcelLineEdit.text(), self.finalThreadFilterFunction) )
         self.thread.start()
 
         
@@ -279,5 +291,5 @@ class AnonWidget(QWidget):
         [i.show()  for i in [self.labelGeneralAnonIcon]]
         self.loadingIconAnon.start()
         
-        self.thread = Thread(target = tbw.wordWriterFunction, args = (self.mainWindow.projectLoaded, self.directoryAnonLineEdit.text(), self.finalThreadAnonFunction) )
+        self.thread = Thread(target = tbw.wordWriterFunction, args = (self.wordFormats[self.anonymizationFormatSelector.currentText()], self.mainWindow.projectLoaded, self.directoryAnonLineEdit.text(), self.finalThreadAnonFunction) )
         self.thread.start()
