@@ -5,7 +5,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from inspect import getmembers, isfunction
-import filters, deidentifiers, utils as aux
+import filters, anonymizers, utils as aux
 import aiTools
 import cgitb 
 cgitb.enable(format = 'text')
@@ -23,7 +23,7 @@ class AnonWidget(QWidget):
                             [(aiTools.filter_flair.__name__, aiTools.filter_flair)] 
                         ),
                         deidentifierList = (
-                            getmembers(deidentifiers, isfunction), 
+                            getmembers(anonymizers, isfunction), 
                             [(aiTools.remove_flair_calle, aiTools.filter_flair), (aiTools.remove_flair_lugar_general, aiTools.filter_flair), (aiTools.remove_flair_nombre_persona, aiTools.filter_flair)]
                         ),
                 ):
@@ -48,7 +48,7 @@ class AnonWidget(QWidget):
             self.outputFormatSelector.addItem(format_name)
 
 
-        self.wordFormats = {"Replace Type": tbw.replace_with_category_word, "Replace X": tbw.replace_with_x_word, "Remove Completely": tbw.remove_completely_word}
+        self.wordFormats = {"Replace with Type": tbw.replace_with_category_word, "Replace with X": tbw.replace_with_x_word, "Remove Completely": tbw.remove_completely_word}
         self.anonymizationFormatSelector.clear()
         for format_name in self.wordFormats:
             self.anonymizationFormatSelector.addItem(format_name)

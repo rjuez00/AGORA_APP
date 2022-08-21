@@ -4,6 +4,8 @@ import requests, matplotlib.pyplot as plt, numpy as np, base64, utils as aux
 import matplotlib
 
 
+finalAmenityDict = {'Sustenance': ['bar', 'biergarten', 'cafe', 'fast_food', 'food_court', 'ice_cream', 'pub', 'restaurant'], 'Education': ['college', 'driving_school', 'kindergarten', 'language_school', 'library', 'toy_library', 'music_school', 'school', 'university'], 'Transportation': ['kick-scooter_rental', 'bicycle_parking', 'bicycle_repair_station', 'bicycle_rental', 'boat_rental', 'boat_sharing', 'bus_station', 'car_rental', 'car_sharing', 'car_wash', 'vehicle_inspection', 'charging_station', 'ferry_terminal', 'fuel', 'grit_bin', 'motorcycle_parking', 'parking', 'parking_entrance', 'parking_space', 'taxi'], 'Financial': ['atm', 'bank', 'bureau_de_change'], 'Healthcare': ['baby_hatch', 'clinic', 'dentist', 'doctors', 'hospital', 'nursing_home', 'pharmacy', 'social_facility', 'veterinary'], 'Entertainment, Arts & Culture': ['arts_centre', 'brothel', 'casino', 'cinema', 'community_centre', 'conference_centre', 'events_venue', 'fountain', 'gambling', 'love_hotel', 'nightclub', 'planetarium', 'public_bookcase', 'social_centre', 'stripclub', 'studio', 'swingerclub', 'theatre'], 'Public Service': ['courthouse', 'embassy', 'fire_station', 'police', 'post_box', 'post_depot', 'post_office', 'prison', 'ranger_station', 'townhall'], 'Facilities': ['bbq', 'bench', 'dog_toilet', 'drinking_water', 'give_box', 'shelter', 'shower', 'telephone', 'toilets', 'water_point', 'watering_place'], 'Waste Management': ['sanitary_dump_station', 'recycling', 'waste_basket', 'waste_disposal', 'waste_transfer_station']}
+
 def google_geocoding(calle, geocodingurl = "https://maps.googleapis.com/maps/api/geocode/json", key = "AIzaSyAoafYjVCpZ6jH8fP57jY7rfXjxRaBJxEo"):
     params = urlencode(
             {"address":  calle,
@@ -28,8 +30,9 @@ def google_geocoding(calle, geocodingurl = "https://maps.googleapis.com/maps/api
 
 
 
-def generate_summary_queries(radius, location, chunklen = 50):
-    finaldict = {'Sustenance': ['bar', 'biergarten', 'cafe', 'fast_food', 'food_court', 'ice_cream', 'pub', 'restaurant'], 'Education': ['college', 'driving_school', 'kindergarten', 'language_school', 'library', 'toy_library', 'music_school', 'school', 'university'], 'Transportation': ['kick-scooter_rental', 'bicycle_parking', 'bicycle_repair_station', 'bicycle_rental', 'boat_rental', 'boat_sharing', 'bus_station', 'car_rental', 'car_sharing', 'car_wash', 'vehicle_inspection', 'charging_station', 'ferry_terminal', 'fuel', 'grit_bin', 'motorcycle_parking', 'parking', 'parking_entrance', 'parking_space', 'taxi'], 'Financial': ['atm', 'bank', 'bureau_de_change'], 'Healthcare': ['baby_hatch', 'clinic', 'dentist', 'doctors', 'hospital', 'nursing_home', 'pharmacy', 'social_facility', 'veterinary'], 'Entertainment, Arts & Culture': ['arts_centre', 'brothel', 'casino', 'cinema', 'community_centre', 'conference_centre', 'events_venue', 'fountain', 'gambling', 'love_hotel', 'nightclub', 'planetarium', 'public_bookcase', 'social_centre', 'stripclub', 'studio', 'swingerclub', 'theatre'], 'Public Service': ['courthouse', 'embassy', 'fire_station', 'police', 'post_box', 'post_depot', 'post_office', 'prison', 'ranger_station', 'townhall'], 'Facilities': ['bbq', 'bench', 'dog_toilet', 'drinking_water', 'give_box', 'shelter', 'shower', 'telephone', 'toilets', 'water_point', 'watering_place'], 'Waste Management': ['sanitary_dump_station', 'recycling', 'waste_basket', 'waste_disposal', 'waste_transfer_station']}
+def generate_summary_queries(radius, location, currentlySelectedAmenities, chunklen = 50):
+    finaldict = finalAmenityDict.copy()
+    finaldict = {topic:[amenity for amenity in subamentieis if amenity in currentlySelectedAmenities] for topic, subamentieis in finaldict.items() }
     
     overpass_query = """\n(    {} );out count;    """
     
@@ -63,9 +66,9 @@ def generate_summary_queries(radius, location, chunklen = 50):
 
 
 
-def herramienta_radio(location, radius = 1500, overpass_urls =["https://overpass.kumi.systems/api/interpreter", "https://lz4.overpass-api.de/api/interpreter", "https://overpass.openstreetmap.ru/api/interpreter"]):
+def herramienta_radio(location, currentlySelectedAmenities, radius = 1500, overpass_urls =["https://overpass.kumi.systems/api/interpreter", "https://lz4.overpass-api.de/api/interpreter", "https://overpass.openstreetmap.ru/api/interpreter"]):
     summary = {}
-    queriesidx, giantquery = generate_summary_queries(radius, location)
+    queriesidx, giantquery = generate_summary_queries(radius, location, currentlySelectedAmenities)
     
     data = []
     for query in giantquery:

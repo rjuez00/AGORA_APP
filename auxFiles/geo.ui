@@ -14,7 +14,10 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
+   <item row="0" column="2">
+    <widget class="QWebEngineView" name="mapWebWidget" native="true"/>
+   </item>
+   <item row="0" column="1">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <widget class="QFrame" name="documentsFrame">
@@ -31,32 +34,36 @@
         <enum>QFrame::Raised</enum>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="3" column="0" colspan="2">
-         <widget class="Line" name="line">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+        <item row="7" column="0" colspan="2">
+         <widget class="QProgressBar" name="mapProgressBar">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
+          <property name="mouseTracking">
+           <bool>false</bool>
+          </property>
+          <property name="value">
+           <number>0</number>
+          </property>
+          <property name="textVisible">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
-        <item row="1" column="0" colspan="2">
-         <widget class="QLabel" name="documentsLabel">
+        <item row="5" column="0">
+         <widget class="QPushButton" name="loadMapButton">
           <property name="font">
            <font>
-            <family>Droid Sans Fallback</family>
-            <pointsize>20</pointsize>
-            <weight>75</weight>
-            <bold>true</bold>
+            <family>DejaVu Sans</family>
+            <pointsize>14</pointsize>
            </font>
           </property>
           <property name="text">
-           <string>Documents</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <string>Show Map for this Document</string>
           </property>
          </widget>
         </item>
-        <item row="4" column="0" colspan="2">
+        <item row="3" column="0" colspan="2">
          <widget class="QLabel" name="amenitiesLabel">
           <property name="font">
            <font>
@@ -87,23 +94,41 @@
           </property>
          </widget>
         </item>
-        <item row="5" column="0" colspan="2">
-         <widget class="QListView" name="listView"/>
-        </item>
-        <item row="7" column="0">
-         <widget class="QPushButton" name="loadMapButton">
+        <item row="1" column="0" colspan="2">
+         <widget class="QLabel" name="documentsLabel">
           <property name="font">
            <font>
-            <family>DejaVu Sans</family>
-            <pointsize>14</pointsize>
+            <family>Droid Sans Fallback</family>
+            <pointsize>20</pointsize>
+            <weight>75</weight>
+            <bold>true</bold>
            </font>
           </property>
           <property name="text">
-           <string>Show Map for this Document</string>
+           <string>Documents</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
-        <item row="10" column="0" colspan="2">
+        <item row="5" column="1">
+         <widget class="QSpinBox" name="radiusBox">
+          <property name="minimum">
+           <number>100</number>
+          </property>
+          <property name="maximum">
+           <number>2000</number>
+          </property>
+          <property name="singleStep">
+           <number>100</number>
+          </property>
+          <property name="value">
+           <number>1000</number>
+          </property>
+         </widget>
+        </item>
+        <item row="8" column="0" colspan="2">
          <widget class="QLabel" name="documentDisplayedName">
           <property name="font">
            <font>
@@ -122,43 +147,13 @@
           </property>
          </widget>
         </item>
-        <item row="9" column="0" colspan="2">
-         <widget class="QProgressBar" name="mapProgressBar">
-          <property name="enabled">
-           <bool>false</bool>
-          </property>
-          <property name="mouseTracking">
-           <bool>false</bool>
-          </property>
-          <property name="value">
-           <number>0</number>
-          </property>
-          <property name="textVisible">
-           <bool>false</bool>
-          </property>
-         </widget>
-        </item>
-        <item row="7" column="1">
-         <widget class="QSpinBox" name="radiusBox">
-          <property name="minimum">
-           <number>100</number>
-          </property>
-          <property name="maximum">
-           <number>2000</number>
-          </property>
-          <property name="singleStep">
-           <number>100</number>
-          </property>
-          <property name="value">
-           <number>1000</number>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="0" colspan="2">
-         <widget class="Line" name="line_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
+        <item row="4" column="0" colspan="2">
+         <widget class="QTreeWidget" name="amenitiesList">
+          <column>
+           <property name="text">
+            <string>Select Amenities</string>
+           </property>
+          </column>
          </widget>
         </item>
        </layout>
@@ -167,11 +162,9 @@
        <zorder>documentDisplayedName</zorder>
        <zorder>loadMapButton</zorder>
        <zorder>documentsLabel</zorder>
-       <zorder>listView</zorder>
        <zorder>amenitiesLabel</zorder>
        <zorder>radiusBox</zorder>
-       <zorder>line</zorder>
-       <zorder>line_2</zorder>
+       <zorder>amenitiesList</zorder>
       </widget>
      </item>
      <item>
@@ -218,9 +211,6 @@
       </widget>
      </item>
     </layout>
-   </item>
-   <item row="0" column="1">
-    <widget class="QWebEngineView" name="mapWebWidget" native="true"/>
    </item>
   </layout>
  </widget>

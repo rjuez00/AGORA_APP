@@ -10,7 +10,8 @@ import googlemaps
 import geocoding
 
 class Statmap():
-    def __init__(self, addresses, radius):
+    def __init__(self, addresses, radius, currentlySelectedAmenities):
+        self.currentlySelectedAmenities = currentlySelectedAmenities
         self.radius = radius
         self.addresses = {}
         self.get_incorrect_addresses = []
@@ -56,7 +57,7 @@ class Statmap():
         self.summaries = {}
         for idx, (address, (coordinates, _)) in enumerate(self.addresses.items()):
             if coordinates != None:  
-                self.summaries[address] = (coordinates, geocoding.herramienta_radio(coordinates, self.radius) )   
+                self.summaries[address] = (coordinates, geocoding.herramienta_radio(coordinates, self.currentlySelectedAmenities, self.radius) )   
             if worker_progress != None:
                 worker_progress.emit((idx/len(self.addresses))*100)
             

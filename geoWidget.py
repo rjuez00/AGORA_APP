@@ -10,6 +10,8 @@ from threading import Thread
 import matplotlib
 callesFilter = "CALLE"
 import utils
+from geocoding import finalAmenityDict
+
 
 class GeoWidget(QWidget):
     def __init__(self, mainWindow):
@@ -23,6 +25,17 @@ class GeoWidget(QWidget):
         #self.mapWebWidget.setHtml(geoPlaceHolder)
         self.cacheMaps = dict(zip(self.mainWindow.projectLoaded.keys(), [None] * len(self.mainWindow.projectLoaded)))
         self.mapProgressBar.hide()
+
+        self.amenitiesReferences = []
+        for topic, listAmenities in finalAmenityDict.items():
+            branch = QTreeWidgetItem([topic])
+            self.amenitiesList.addTopLevelItem(branch)
+          
+            for amenity in listAmenities:
+                tempitem = QTreeWidgetItem([amenity])
+                branch.addChild(tempitem)
+                self.amenitiesReferences.append(tempitem)
+                tempitem.setCheckState(0, Qt.Checked)
 
 
 
@@ -110,7 +123,10 @@ class GeoWidget(QWidget):
         self.loadMapButton.hide()
         self.radiusBox.hide()
 
-        self.mapGenerator = Statmap(self.streetsSelected.copy(), self.radiusBox.value())
+        self.currentlySelectedAmenities = [filterCheck.text(0) for filterCheck in self.amenitiesReferences if filterCheck.checkState(0) == 2]
+        print("AAAAAAAAAAAAAAAAAAAAA"*10 , self.currentlySelectedAmenities)
+
+        self.mapGenerator = Statmap(self.streetsSelected.copy(), self.radiusBox.value(), self.currentlySelectedAmenities)
         
         self.loadingMapDocumentName = self.documentCurrentlySelected
         self.loadingMapStreetChecks = self.streetsSelected

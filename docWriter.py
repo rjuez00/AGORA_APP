@@ -153,6 +153,10 @@ def remove_completely_word(filename, target, directory_save):
 
 
     document.add_heading("ANONIMIZADO_" + filename, 0)
+    target = re.sub("[A-Z]+<+", "", target) 
+
+  
+
     target = decode_string(target)
     parrafos = re.split(" - - ", target)
 
@@ -199,14 +203,26 @@ def replace_with_x_word(filename, target, directory_save):
 
 
     document.add_heading("ANONIMIZADO_" + filename, 0)
+
+    oldlen = len(target)
+    for appearnce in re.finditer("[A-Z]+<+", target) :
+        startIdx, endIdx = appearnce.span()
+        target = target[:startIdx] + "X"*(endIdx-startIdx-1) + "<" + target[endIdx:]
+
+    newlen = len(target)
+    if oldlen != newlen:
+        print("ALERTAAAAAAAAAAAAAAAAAA")
+        exit(1)
+
     target = decode_string(target)
     parrafos = re.split(" - - ", target)
+
 
     for paragraphText in parrafos:
         paragraphWord = document.add_paragraph()
 
         pointerText = 0
-        for coloredWord in re.finditer(r"[A-Z]+<+", paragraphText):
+        for coloredWord in re.finditer(r"X+<+", paragraphText):
             startIdxColored, endIdxColored = coloredWord.span()
             paragraphWord.add_run(paragraphText[pointerText:startIdxColored])
             specialWordRunner = paragraphWord.add_run(paragraphText[startIdxColored:endIdxColored])
