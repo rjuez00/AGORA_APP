@@ -35,9 +35,9 @@ def scan_PDF(filename):
 
 def scan_TXT(filename):
     text = ""
-    with fitz.open(filename) as doc:
-        for page in doc:
-            text += page.getText()
+    with open(filename, "r") as file:
+        text = file.read()
+    
     return clean_encoding(text)
 
 
