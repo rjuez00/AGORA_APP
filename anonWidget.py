@@ -5,8 +5,8 @@ from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from inspect import getmembers, isfunction
-import filters, anonymizers, utils as aux
-import aiTools
+import PNfilters, PNanonymizers, utils as aux
+import aiPNfilters
 import cgitb 
 cgitb.enable(format = 'text')
 from threading import Thread
@@ -19,12 +19,12 @@ workerGlobal = None
 class AnonWidget(QWidget):
     def __init__(self,  mainWindow, 
                         filterList = (
-                            getmembers(filters, isfunction), 
-                            [(aiTools.filter_flair.__name__, aiTools.filter_flair)] 
+                            getmembers(PNfilters, isfunction), 
+                            [(aiPNfilters.filter_flair.__name__, aiPNfilters.filter_flair)] 
                         ),
                         deidentifierList = (
-                            getmembers(anonymizers, isfunction), 
-                            [(aiTools.remove_flair_calle, aiTools.filter_flair), (aiTools.remove_flair_lugar_general, aiTools.filter_flair), (aiTools.remove_flair_nombre_persona, aiTools.filter_flair)]
+                            getmembers(PNanonymizers, isfunction), 
+                            [(aiPNfilters.remove_flair_calle, aiPNfilters.filter_flair), (aiPNfilters.remove_flair_lugar_general, aiPNfilters.filter_flair), (aiPNfilters.remove_flair_nombre_persona, aiPNfilters.filter_flair)]
                         ),
                 ):
         super(AnonWidget, self).__init__()

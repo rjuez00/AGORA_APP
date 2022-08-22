@@ -1,7 +1,7 @@
 import time, os, utils
 
-storage_models = "auxFiles"
-entities_model = ["CALLE", "LUGAR_GENERAL", "NOMBRE_PERSONA"]
+storage_models = "auxFiles/NERmodels"
+entities_model = ["TERRITORIO", "FECHAS", "EDAD_SUJETO_ASISTENCIA", "NOMBRE_SUJETO_ASISTENCIA", "NOMBRE_PERSONAL_SANITARIO", "SEXO_SUJETO_ASISTENCIA", "CALLE", "PAIS", "ID_SUJETO_ASISTENCIA", "CORREO_ELECTRONICO", "ID_TITULACION_PERSONAL_SANITARIO", "ID_ASEGURAMIENTO", "HOSPITAL", "FAMILIARES_SUJETO_ASISTENCIA", "INSTITUCION", "ID_CONTACTO_ASISTENCIAL", "NUMERO_TELEFONO",       "PROFESION", "NUMERO_FAX", "CENTRO_SALUD", "OTROS_SUJETO_ASISTENCIA"]
 
 def filter_flair(contentdict):
     from flair.models import SequenceTagger
@@ -9,7 +9,7 @@ def filter_flair(contentdict):
     import flair, torch
     flair.device = torch.device('cpu') 
 
-    flairTagger = SequenceTagger.load(utils.resource_path(storage_models + "/nermodel.pt"))
+    flairTagger = SequenceTagger.load(utils.resource_path(storage_models + "/pnmodel_tfg.pt"))
     
     for documentName in contentdict.keys():
         print("FILTERING:", documentName)
@@ -30,7 +30,7 @@ def filter_flair(contentdict):
 
 
 
-def remove_flair_lugar_general(contentDict):
+def remove_ai_tag(contentDict, tag, replacement):
     text = contentDict["deidentified"]
     entities_model = "LUGAR_GENERAL"
     for startidx, (endidx, entityText) in contentDict[entities_model].items():
@@ -43,30 +43,7 @@ def remove_flair_lugar_general(contentDict):
     return text
 
 
+removers = [(lambda contentDict: remove_ai_tag(contentDict, entity, entity[:3]), f"remove_{entity}") for entity in entities_model]
 
-def remove_flair_calle( contentDict):
-    text = contentDict["deidentified"]
-    entities_model = "CALLE"
-    for startidx, (endidx, entityText) in contentDict[entities_model].items():
-        startidx = int(startidx)
-        endidx = int(endidx)
-        text = text[:int(startidx)] + "LOC"+ "<" * (endidx-startidx-3) + text[int(endidx):]
-        
-
-    return text
-
-
-
-def remove_flair_nombre_persona(contentDict):
-    text = contentDict["deidentified"]
-    entities_model = "NOMBRE_PERSONA"
-    for startidx, contents in contentDict[entities_model].items():
-        endidx, entityText = contents
-        startidx = int(startidx)
-        endidx = int(endidx)
-
-        text = text[:int(startidx)] + "PER" + "<" * (endidx-startidx-3) + text[int(endidx):]
-        
-
-    return text
-
+for i, j in removers:
+    i.__name__ = j

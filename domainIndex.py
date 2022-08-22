@@ -1,17 +1,16 @@
-import filters, anonymizers, utils as aux
-import aiTools
+import PNfilters, PNanonymizers, utils as aux
+import aiPNfilters, aiMEDOCCANfilters
 from inspect import getmembers, isfunction
 
-domainIndex = {"police"     : { "filterList" :       ( getmembers(filters, isfunction), 
-                                                   [(aiTools.filter_flair.__name__, aiTools.filter_flair)] ),
-                                "deidentifierList" : ( getmembers(anonymizers, isfunction), 
-                                                   [(aiTools.remove_flair_calle, aiTools.filter_flair), (aiTools.remove_flair_lugar_general, aiTools.filter_flair), (aiTools.remove_flair_nombre_persona, aiTools.filter_flair)]) 
+domainIndex = {"police_PDF"     : {     "scanner": aux.scan_PDF,
+                                        "filterList" :       ( getmembers(PNfilters, isfunction), 
+                                                   [(aiPNfilters.filter_flair.__name__, aiPNfilters.filter_flair)] ),
+                                         "deidentifierList" : ( getmembers(PNanonymizers, isfunction), 
+                                                   [(aiPNfilters.remove_flair_calle, aiPNfilters.filter_flair), (aiPNfilters.remove_flair_lugar_general, aiPNfilters.filter_flair), (aiPNfilters.remove_flair_nombre_persona, aiPNfilters.filter_flair)]) 
                                 },
                 
                 
-                "meddocan"  : { "filterList" :       ( getmembers(filters, isfunction), 
-                                                   [(aiTools.filter_flair.__name__, aiTools.filter_flair)] ),
-                                "deidentifierList" : ( getmembers(anonymizers, isfunction), 
-                                                   []) 
-                                },
+                "meddocan_TXT"  : {  "scanner": aux.scan_TXT,
+                                     "filterList" :       ([], [(aiMEDOCCANfilters.filter_flair.__name__, aiMEDOCCANfilters.filter_flair)] ),
+                                     "deidentifierList" : ([],  [(i,aiMEDOCCANfilters.filter_flair) for i, _ in aiMEDOCCANfilters.removers])},
 }

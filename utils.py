@@ -26,19 +26,28 @@ def clean_encoding(text, encoding = "latin-1"):
 
 ################# SCANNING DOCUMENTS #################
 
-def scan_text(filename):
+def scan_PDF(filename):
     text = ""
     with fitz.open(filename) as doc:
         for page in doc:
             text += page.getText()
     return clean_encoding(text)
 
+def scan_TXT(filename):
+    text = ""
+    with fitz.open(filename) as doc:
+        for page in doc:
+            text += page.getText()
+    return clean_encoding(text)
+
+
 class ScanDocumentsThread(QThread):
     update_progress = pyqtSignal(int)
     worker_complete = pyqtSignal(dict)
 
-    def __init__(self, filenames, parent = None):
+    def __init__(self, filenames, scanner_to_use = scan_PDF, parent = None):
         super(ScanDocumentsThread, self).__init__(parent)
+        self.scanner_to_use = scanner_to_use
         self.filenames = filenames
 
     def run(self):
@@ -46,7 +55,7 @@ class ScanDocumentsThread(QThread):
         docs = {}
         cuantDocs = len(self.filenames)
         for idx, filename in enumerate(self.filenames):
-            texto = scan_text(filename)
+            texto = self.scanner_to_use(filename)
             #print("ESCANEANDO ", filename, "CHECKS:", texto != "", texto.isspace)
             
 
@@ -55,8 +64,6 @@ class ScanDocumentsThread(QThread):
                 docs[filename.split("/")[-1]] = {"raw": texto} 
                 self.update_progress.emit(100 * ((1+idx)/cuantDocs))
 
-                if(filename.split("/")[-1] == "0500_Caso_C0740626_obj_78690364.PDF"):
-                    print(texto[0], ord(texto[0]))
             else:
                 print(f"ALERTA: El documento {filename} no ha sido escaneado")
 

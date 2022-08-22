@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from domainChooserDialog import DomainChooserDialog
 import sys, re, json, utils as aux, cgitb , multiprocessing
 from PyQt5.QtGui import QIcon
-
+from domainIndex import domainIndex
  
 
 
@@ -56,7 +56,7 @@ class StartScreen(QDialog):
 
     def loadPDFsui(self):
         print("LOADING PDFs")
-        fileNames, _ = QFileDialog.getOpenFileNames(self, caption = "Select PDFs to start project", filter = "Documents (*.pdf *.PDF)")
+        fileNames, _ = QFileDialog.getOpenFileNames(self, caption = "Select files to start project")
         if(len(fileNames) == 0):
             exit()
 
@@ -100,16 +100,10 @@ class StartScreen(QDialog):
         self.openJSONbutton.hide()
         self.openPDFSbutton.hide()
         
-        
-        
-
-
-        
-        self.worker = aux.ScanDocumentsThread(fileNames)
+        self.worker = aux.ScanDocumentsThread(fileNames, domainIndex[self.domain]["scanner"])
         self.worker.worker_complete.connect(self.finishedAddingDocuments)
         self.worker.update_progress.connect(self.updateProgressAddingDocuments)
         self.worker.start()
-        
         
         self.progressBar.show()
         self.openJSONbutton.hide()

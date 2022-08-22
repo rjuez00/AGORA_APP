@@ -14,7 +14,7 @@ import os, json, utils, sys
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, projectDirectory, projectLoaded, domain = "Police"):
+    def __init__(self, projectDirectory, projectLoaded, domain = "police_PDF"):
         super(MainWindow, self).__init__()
         loadUi(utils.resource_path("auxFiles/mainwindow.ui"),self)
         self.freezeFlag = False
