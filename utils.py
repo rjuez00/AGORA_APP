@@ -42,6 +42,7 @@ def scan_TXT_MEDDOCAN(filename):
         return text
 
 
+
 class ScanDocumentsThread(QThread):
     update_progress = pyqtSignal(int)
     worker_complete = pyqtSignal(dict)
