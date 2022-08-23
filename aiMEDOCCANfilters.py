@@ -9,7 +9,7 @@ def filter_flair(contentdict):
     import flair, torch
     flair.device = torch.device('cpu') 
 
-    flairTagger = SequenceTagger.load(utils.resource_path(storage_models + "/pnmodel_tfg.pt"))
+    flairTagger = SequenceTagger.load(utils.resource_path(storage_models + "/meddocanmodel.pt"))
     
     for documentName in contentdict.keys():
         print("FILTERING:", documentName)
@@ -32,18 +32,21 @@ def filter_flair(contentdict):
 
 def remove_ai_tag(contentDict, tag, replacement):
     text = contentDict["deidentified"]
-    entities_model = "LUGAR_GENERAL"
-    for startidx, (endidx, entityText) in contentDict[entities_model].items():
+    print("!!!!!!!!!!!!!!REMOVING:", tag, contentDict[tag])
+    for startidx, (endidx, entityText) in contentDict[tag].items():
+        print("\t\tremoving:", entityText)
         startidx = int(startidx)
         endidx = int(endidx)
 
-        text = text[:int(startidx)] + "LOC" + "<" * (endidx-startidx-3) + text[int(endidx):]
+        text = text[:int(startidx)] + replacement + "<" * (endidx-startidx-3) + text[int(endidx):]
         
 
     return text
 
 
-removers = [(lambda contentDict: remove_ai_tag(contentDict, entity, entity[:3]), f"remove_{entity}") for entity in entities_model]
+
+removers = [(lambda contentDict, entity=entity: remove_ai_tag(contentDict, entity, entity[:3]), f"remove_{entity}") for entity in entities_model]
+
 
 for i, j in removers:
     i.__name__ = j

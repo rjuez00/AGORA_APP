@@ -1,7 +1,8 @@
 from PyQt5.QtCore import pyqtSignal, QThread
-import re, multiprocessing, fitz, cgitb, codecs, os, sys
+import re, fitz, cgitb, codecs, os, sys
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
+from pathos.multiprocessing import ProcessingPool as Pool
 cgitb.enable(format = 'text')
 
 def reemplazos(text,args=None):
@@ -14,7 +15,7 @@ def reemplazos(text,args=None):
     return text
 
 
-def clean_encoding(text, encoding = "latin-1"):
+def clean_encoding_PN(text, encoding = "latin-1"):
     text = codecs.encode(text, encoding = encoding, errors = "ignore")
     text = codecs.decode(text, encoding=encoding, errors = "ignore")
 
@@ -26,26 +27,26 @@ def clean_encoding(text, encoding = "latin-1"):
 
 ################# SCANNING DOCUMENTS #################
 
-def scan_PDF(filename):
+def scan_PDF_PN(filename):
     text = ""
     with fitz.open(filename) as doc:
         for page in doc:
             text += page.getText()
-    return clean_encoding(text)
+    return clean_encoding_PN(text)
 
-def scan_TXT(filename):
+def scan_TXT_MEDDOCAN(filename):
     text = ""
-    with open(filename, "r") as file:
+    with open(filename, "r", encoding="utf-8") as file:
         text = file.read()
-    
-    return clean_encoding(text)
+        #text = codecs.decode(text, encoding="utf-8", errors = "ignore")
+        return text
 
 
 class ScanDocumentsThread(QThread):
     update_progress = pyqtSignal(int)
     worker_complete = pyqtSignal(dict)
 
-    def __init__(self, filenames, scanner_to_use = scan_PDF, parent = None):
+    def __init__(self, filenames, scanner_to_use = scan_PDF_PN, parent = None):
         super(ScanDocumentsThread, self).__init__(parent)
         self.scanner_to_use = scanner_to_use
         self.filenames = filenames
@@ -245,18 +246,18 @@ class ParalelizadorTarea():
         else:
             # iniciar threads
             try:
-                pool = multiprocessing.Pool(threadcount)
+                pool = Pool(threadcount)
             except:
                 return dicts
 
             splittedProject = []
             for i in range(0, threadcount-1):
-                splittedProject.append(    ({key: dicts[key] for key in claves[currentrange:(currentrange+jumpdelta)]},  args,)    )
+                splittedProject.append(    {key: dicts[key] for key in claves[currentrange:(currentrange+jumpdelta)]}   )
                 currentrange += jumpdelta
             
-            splittedProject.append(({key: dicts[key] for key in claves[currentrange:]}, args,))
+            splittedProject.append(  {key: dicts[key] for key in claves[currentrange:]}   )
             
-            a = pool.starmap(funcion, splittedProject)
+            a = pool.map(funcion, splittedProject, [args]*len(splittedProject))
     
         
             # comentar las siguientes dos lineas si se va a hacer el pyinstaller, si no descomentar

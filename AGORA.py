@@ -56,12 +56,16 @@ class StartScreen(QDialog):
 
     def loadPDFsui(self):
         print("LOADING PDFs")
-        fileNames, _ = QFileDialog.getOpenFileNames(self, caption = "Select files to start project")
+        
+
+        self.domain = DomainChooserDialog().getResults()
+        fileExtension = domainIndex[self.domain]['fileType']
+
+        fileNames, _ = QFileDialog.getOpenFileNames(self, caption = "Select files to start project", filter = f"PDF Files (*.{fileExtension} *.{fileExtension.lower()})")
         if(len(fileNames) == 0):
             exit()
 
 
-        self.domain = DomainChooserDialog().getResults()
 
         projectName = ""
         checkspecialchars = re.compile('[@_!#$%^&*()<>?/\|}{~:\.]')
