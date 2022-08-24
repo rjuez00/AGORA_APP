@@ -30,6 +30,9 @@ class StartScreen(QDialog):
         self.openJSONbutton.clicked.connect(self.loadJSONui)
         self.openPDFSbutton.clicked.connect(self.loadPDFsui)
 
+
+        self.setWindowFlags(Qt.WindowCloseButtonHint)
+
         self.show()
 
         if(quickstart != None):

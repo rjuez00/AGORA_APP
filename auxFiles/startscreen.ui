@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>934</width>
-    <height>97</height>
+    <width>815</width>
+    <height>167</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,8 +18,8 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>451</width>
-    <height>60</height>
+    <width>0</width>
+    <height>0</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -36,25 +36,39 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="openJSONButton">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <pointsize>14</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>Open Project (.agora)</string>
+        <string>Open Project
+(Select .agora project file)</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="openPDFsButton">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="font">
         <font>
          <pointsize>14</pointsize>
         </font>
        </property>
        <property name="text">
-        <string>Create Project (PDFs)</string>
+        <string>Create Project
+(Select Documents)</string>
        </property>
       </widget>
      </item>

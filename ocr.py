@@ -62,7 +62,7 @@ def clean_encoding(text, encoding = "latin-1"):
     return text.replace("\n", "   ")
 
 def scan_PDF_OCR_GC(filename):
-    texto = get_text_from_any_pdf(filename) 
+    return get_text_from_any_pdf(filename) 
 
 
 
