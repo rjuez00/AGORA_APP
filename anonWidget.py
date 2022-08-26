@@ -42,7 +42,7 @@ class AnonWidget(QWidget):
         #BUTTON ASIGNATION
         self.buttonAssignation()
 
-        self.excelFormats = {"Two Row": tbw.two_row_format, "Format Lara": tbw.format_lara}
+        self.excelFormats = {"Excel: Two Row": tbw.two_row_format, "Excel: Format Lara": tbw.format_lara, "SQL: Format Lara": tbw.format_lara}
         self.outputFormatSelector.clear()
         for format_name in self.excelFormats:
             self.outputFormatSelector.addItem(format_name)
@@ -158,7 +158,7 @@ class AnonWidget(QWidget):
 
 
         for item in self.filtersChecks:
-            item.setCheckState(0)
+            item.setCheckState(2)
 
     def chooseDirectoryExcel(self):
         excelDirectory = QFileDialog.getExistingDirectory(self, caption = "Where do you want to export the filters? (Excel file)")
@@ -208,8 +208,26 @@ class AnonWidget(QWidget):
         [i.show()  for i in [ self.labelGeneralFilterIcon]]
         self.loadingIconFilter.start()
 
-        
-        self.thread = Thread(target = tbw.excelWriterFunction, args = (self.excelFormats[self.outputFormatSelector.currentText()], self.mainWindow.projectLoaded, self.directoryExcelLineEdit.text(), self.finalThreadFilterFunction) )
+
+        DumpFilterSelector = uic.loadUiType("auxFiles/dumpFilterSelector.ui")[0]
+
+        class QDialogClass(QDialog, DumpFilterSelector):
+            def __init__(self, parent=None):
+                QDialog.__init__(self, parent)
+                self.setupUi(self)
+        dialog = QDialogClass()
+
+        self.exportFiltersChecks = []
+        for category in self.mainWindow.projectLoaded[list(self.mainWindow.projectLoaded.keys())[0]].keys():
+            if category != "raw" and category != "deidentified":
+                item = QListWidgetItem(category, dialog.filterSelector)
+                self.exportFiltersChecks.append(item)
+                item.setCheckState(2)
+
+
+
+        dialog.exec_()
+        self.thread = Thread(target = tbw.excelWriterFunction, args = (self.excelFormats[self.outputFormatSelector.currentText()], self.mainWindow.projectLoaded, self.directoryExcelLineEdit.text(),  self.dumpOffsetsCheckBox.isChecked(), [], self.finalThreadFilterFunction) )
         self.thread.start()
 
         

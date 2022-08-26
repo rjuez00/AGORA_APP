@@ -3,7 +3,7 @@ from fileinput import filename
 from PyQt5.QtCore import pyqtSignal, Qt, QThread
 from docx.shared import RGBColor, Inches, Cm
 
-def format_lara(projectLoaded):   
+def format_lara(projectLoaded, dumpOffsets, categories_to_dump, fileDirectory):   
     default_filters = [key for key, contents in projectLoaded[list(projectLoaded.keys())[0]].items() if type(contents) == dict]
     multiindex = []
     each_entity_in_filter_has = ["entity", "index"]
@@ -33,10 +33,10 @@ def format_lara(projectLoaded):
                 a.loc[(documentName, "entity")  ,   (filterName, idx+1)] = entityText
                 a.loc[(documentName, "index")  ,   (filterName, idx+1)] = f"{startidx} - {endidx}"""
     
-    return a
+    a.to_excel(fileDirectory)
 
 
-def two_row_format(projectLoaded):   
+def two_row_format(projectLoaded, dumpOffsets, categories_to_dump, fileDirectory):   
     default_filters = [key for key, contents in projectLoaded[list(projectLoaded.keys())[0]].items() if type(contents) == dict]
     multiindex = []
     each_entity_in_filter_has = ["entity", "index"]
@@ -66,11 +66,11 @@ def two_row_format(projectLoaded):
                 a.loc[(documentName, "entity")  ,   (filterName, idx+1)] = entityText
                 a.loc[(documentName, "index")  ,   (filterName, idx+1)] = f"{startidx} - {endidx}"
     
-    return a
+    a.to_excel(fileDirectory)
 
-def excelWriterFunction(pandas_creation, projectLoaded, directorySave, finishingfunction):
-    a = pandas_creation(projectLoaded)
-    a.to_excel(directorySave)
+
+def excelWriterFunction(dumper, projectLoaded, directorySave, dumpOffsets, categories_to_dump, finishingfunction):
+    dumper(projectLoaded, dumpOffsets, categories_to_dump, directorySave)
     finishingfunction()
 
 def wordWriterFunction(word_function, projectLoaded, directorySave, finishingfunction):

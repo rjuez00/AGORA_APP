@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1191</width>
+    <width>1384</width>
     <height>576</height>
    </rect>
   </property>
@@ -99,25 +99,7 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
-      <item row="0" column="0" colspan="6">
-       <widget class="QLabel" name="filtersLabel">
-        <property name="font">
-         <font>
-          <family>Droid Sans Fallback</family>
-          <pointsize>20</pointsize>
-          <weight>75</weight>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Filters</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="5">
+      <item row="11" column="6" colspan="2">
        <widget class="QPushButton" name="exportFiltersButton">
         <property name="font">
          <font>
@@ -126,45 +108,12 @@
          </font>
         </property>
         <property name="text">
-         <string>Export
-Excel</string>
+         <string>Dump to
+File</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="0" rowspan="2" colspan="6">
-       <widget class="QPushButton" name="applyFiltersButton">
-        <property name="font">
-         <font>
-          <family>DejaVu Sans</family>
-          <pointsize>14</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Apply Filters</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0" colspan="6">
-       <widget class="QListWidget" name="listaFiltersWidget">
-        <property name="mouseTracking">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="1">
-       <widget class="QToolButton" name="excelDirectoryButton">
-        <property name="font">
-         <font>
-          <family>DejaVu Sans</family>
-          <pointsize>14</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>dir...</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="4">
+      <item row="11" column="4">
        <widget class="QLabel" name="labelGeneralFilterIcon">
         <property name="enabled">
          <bool>true</bool>
@@ -203,7 +152,61 @@ Excel</string>
         </property>
        </widget>
       </item>
-      <item row="9" column="5">
+      <item row="6" column="0" rowspan="2" colspan="8">
+       <widget class="QPushButton" name="applyFiltersButton">
+        <property name="font">
+         <font>
+          <family>DejaVu Sans</family>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>Apply Filters</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0" colspan="8">
+       <widget class="QListWidget" name="listaFiltersWidget">
+        <property name="mouseTracking">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0" colspan="8">
+       <widget class="QLabel" name="filtersLabel">
+        <property name="font">
+         <font>
+          <family>Droid Sans Fallback</family>
+          <pointsize>20</pointsize>
+          <weight>75</weight>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="text">
+         <string>Filters</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="11" column="0">
+       <widget class="QLineEdit" name="directoryExcelLineEdit"/>
+      </item>
+      <item row="11" column="1">
+       <widget class="QToolButton" name="excelDirectoryButton">
+        <property name="font">
+         <font>
+          <family>DejaVu Sans</family>
+          <pointsize>14</pointsize>
+         </font>
+        </property>
+        <property name="text">
+         <string>dir...</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="0">
        <widget class="QComboBox" name="outputFormatSelector">
         <item>
          <property name="text">
@@ -217,8 +220,12 @@ Excel</string>
         </item>
        </widget>
       </item>
-      <item row="8" column="0">
-       <widget class="QLineEdit" name="directoryExcelLineEdit"/>
+      <item row="12" column="7">
+       <widget class="QCheckBox" name="dumpOffsetsCheckBox">
+        <property name="text">
+         <string>Dump Offsets</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -232,13 +239,6 @@ Excel</string>
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="0" colspan="5">
-       <widget class="QListWidget" name="listaAnonWidget">
-        <property name="mouseTracking">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item row="5" column="0">
        <widget class="QLineEdit" name="directoryAnonLineEdit"/>
       </item>
@@ -299,6 +299,32 @@ Excel</string>
         </property>
        </widget>
       </item>
+      <item row="1" column="0" colspan="5">
+       <widget class="QListWidget" name="listaAnonWidget">
+        <property name="mouseTracking">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="3" colspan="2">
+       <widget class="QComboBox" name="anonymizationFormatSelector">
+        <item>
+         <property name="text">
+          <string>Test1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Test2</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Test3</string>
+         </property>
+        </item>
+       </widget>
+      </item>
       <item row="5" column="1">
        <widget class="QToolButton" name="anonDirectoryButton">
         <property name="font">
@@ -337,25 +363,6 @@ Excel</string>
          <string>Export Documents
 Anonymized</string>
         </property>
-       </widget>
-      </item>
-      <item row="6" column="3" colspan="2">
-       <widget class="QComboBox" name="anonymizationFormatSelector">
-        <item>
-         <property name="text">
-          <string>Test1</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Test2</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>Test3</string>
-         </property>
-        </item>
        </widget>
       </item>
      </layout>
