@@ -3,10 +3,51 @@ from fileinput import filename
 from PyQt5.QtCore import pyqtSignal, Qt, QThread
 from docx.shared import RGBColor, Inches, Cm
 
-def format_lara(projectLoaded, dumpOffsets, categories_to_dump, fileDirectory):   
-    default_filters = [key for key, contents in projectLoaded[list(projectLoaded.keys())[0]].items() if type(contents) == dict]
+def sheet_per_document(projectLoaded, dumpOffsets, categories_to_dump, fileDirectory):   
+    default_filters = [key for key, contents in projectLoaded[list(projectLoaded.keys())[0]].items() if type(contents) == dict and key in categories_to_dump]
+    writer = pd.ExcelWriter(fileDirectory, engine='xlsxwriter')
+
+
+    for documentName in projectLoaded.keys():
+        max_filter_length = 0
+        for filterName in default_filters:
+            max_filter_length= max(max_filter_length, len(projectLoaded[documentName][filterName]))
+
+
+        multicolumn = []
+        each_entity_in_filter_has = ["entity", "index"] if dumpOffsets == True else ["entity"]
+        for filterName in default_filters:
+            for miniindex in each_entity_in_filter_has:
+                multicolumn.append((filterName,miniindex))
+        
+    
+       
+        multicolumn = pd.MultiIndex.from_tuples(multicolumn)
+
+
+        a = pd.DataFrame(index = range(max_filter_length), columns = multicolumn)
+
+
+        for filterName in default_filters:
+            entityTexts = [entityText for idx, (startidx, (endidx, entityText)) in enumerate(projectLoaded[documentName][filterName].items())]
+            offsets = [f"{startidx} - {endidx}" for idx, (startidx, (endidx, entityText)) in enumerate(projectLoaded[documentName][filterName].items())]
+
+            a[(filterName, "entity")] = pd.Series(entityTexts, index = a.index[:len(entityTexts)])
+            if dumpOffsets == True:
+                a[(filterName, "index") ] =  pd.Series(offsets, index = a.index[:len(offsets)])
+        
+
+        #a.reset_index(inplace=True, drop=True)
+        a.to_excel(writer, sheet_name=documentName[:30])
+
+    writer.save()
+
+
+
+def single_sheet(projectLoaded, dumpOffsets, categories_to_dump, fileDirectory):   
+    default_filters = [key for key, contents in projectLoaded[list(projectLoaded.keys())[0]].items() if type(contents) == dict and key in categories_to_dump]
     multiindex = []
-    each_entity_in_filter_has = ["entity", "index"]
+    each_entity_in_filter_has = ["entity", "index"] if dumpOffsets == True else ["entity"]
     for documentName in projectLoaded.keys():
         for miniindex in each_entity_in_filter_has:
             multiindex.append((documentName, miniindex))
@@ -27,44 +68,12 @@ def format_lara(projectLoaded, dumpOffsets, categories_to_dump, fileDirectory):
     a = pd.DataFrame(index=multiindex, columns = multicolumn)
 
 
-    """for documentName in projectLoaded.keys():
-        for filterName in default_filters:
-            for idx, (startidx, (endidx, entityText)) in enumerate(projectLoaded[documentName][filterName].items()):
-                a.loc[(documentName, "entity")  ,   (filterName, idx+1)] = entityText
-                a.loc[(documentName, "index")  ,   (filterName, idx+1)] = f"{startidx} - {endidx}"""
-    
-    a.to_excel(fileDirectory)
-
-
-def two_row_format(projectLoaded, dumpOffsets, categories_to_dump, fileDirectory):   
-    default_filters = [key for key, contents in projectLoaded[list(projectLoaded.keys())[0]].items() if type(contents) == dict]
-    multiindex = []
-    each_entity_in_filter_has = ["entity", "index"]
-    for documentName in projectLoaded.keys():
-        for miniindex in each_entity_in_filter_has:
-            multiindex.append((documentName, miniindex))
-    multiindex = pd.MultiIndex.from_tuples(multiindex, names=["documentName", "filterContents"])
-    
-    filters_length = {filterName : 0 for filterName in default_filters}
-    for _, contentDocument in projectLoaded.items():
-        for filterName in default_filters:
-            filters_length[filterName] = max(filters_length[filterName], len(contentDocument[filterName]))
-    
-    multicolumn = []
-    for filtersName, length in filters_length.items():
-        for i in range(length):
-            multicolumn.append((filtersName, i+1))
-    multicolumn = pd.MultiIndex.from_tuples(multicolumn, names=["filterName", "#"])
-
-
-    a = pd.DataFrame(index=multiindex, columns = multicolumn)
-
-
     for documentName in projectLoaded.keys():
         for filterName in default_filters:
             for idx, (startidx, (endidx, entityText)) in enumerate(projectLoaded[documentName][filterName].items()):
                 a.loc[(documentName, "entity")  ,   (filterName, idx+1)] = entityText
-                a.loc[(documentName, "index")  ,   (filterName, idx+1)] = f"{startidx} - {endidx}"
+                if dumpOffsets == True:
+                    a.loc[(documentName, "index")  ,   (filterName, idx+1)] = f"{startidx} - {endidx}"
     
     a.to_excel(fileDirectory)
 

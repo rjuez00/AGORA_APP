@@ -42,7 +42,7 @@ class AnonWidget(QWidget):
         #BUTTON ASIGNATION
         self.buttonAssignation()
 
-        self.excelFormats = {"Excel: Two Row": tbw.two_row_format, "Excel: Format Lara": tbw.format_lara, "SQL: Format Lara": tbw.format_lara}
+        self.excelFormats = {"Excel: Sheet per document": tbw.sheet_per_document, "Excel: Single sheet": tbw.single_sheet, "SQL: Relational Tables": tbw.sheet_per_document}
         self.outputFormatSelector.clear()
         for format_name in self.excelFormats:
             self.outputFormatSelector.addItem(format_name)
@@ -53,6 +53,8 @@ class AnonWidget(QWidget):
         for format_name in self.wordFormats:
             self.anonymizationFormatSelector.addItem(format_name)
 
+
+        self.dumpOffsetsCheckBox.setChecked(True)
 
 
     def buttonAssignation(self):
@@ -227,7 +229,8 @@ class AnonWidget(QWidget):
 
 
         dialog.exec_()
-        self.thread = Thread(target = tbw.excelWriterFunction, args = (self.excelFormats[self.outputFormatSelector.currentText()], self.mainWindow.projectLoaded, self.directoryExcelLineEdit.text(),  self.dumpOffsetsCheckBox.isChecked(), [], self.finalThreadFilterFunction) )
+        selectedCategoriesToOutput = [categoryName.text() for categoryName in self.exportFiltersChecks if categoryName.checkState() == 2]
+        self.thread = Thread(target = tbw.excelWriterFunction, args = (self.excelFormats[self.outputFormatSelector.currentText()], self.mainWindow.projectLoaded, self.directoryExcelLineEdit.text(),  self.dumpOffsetsCheckBox.isChecked(), selectedCategoriesToOutput, self.finalThreadFilterFunction) )
         self.thread.start()
 
         
