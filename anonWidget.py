@@ -222,7 +222,10 @@ class AnonWidget(QWidget):
                 self.exportFiltersChecks.append(item)
                 item.setCheckState(2)
 
-
+        if len(self.exportFiltersChecks) == 0:
+            QMessageBox.about(self, "No Filters", "There are no filters to export...")
+            self.finalThreadFilterFunction()
+            return
 
         dialog.exec_()
         selectedCategoriesToOutput = [categoryName.text() for categoryName in self.exportFiltersChecks if categoryName.checkState() == 2]
