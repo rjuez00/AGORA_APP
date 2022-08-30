@@ -18,14 +18,9 @@ workerGlobal = None
 
 class AnonWidget(QWidget):
     def __init__(self,  mainWindow, 
-                        filterList = (
-                            getmembers(PNfilters, isfunction), 
-                            [(aiPNfilters.filter_flair.__name__, aiPNfilters.filter_flair)] 
-                        ),
-                        deidentifierList = (
-                            getmembers(PNanonymizers, isfunction), 
-                            [(aiPNfilters.remove_flair_calle, aiPNfilters.filter_flair), (aiPNfilters.remove_flair_lugar_general, aiPNfilters.filter_flair), (aiPNfilters.remove_flair_nombre_persona, aiPNfilters.filter_flair)]
-                        ),
+                        filterList,
+                        deidentifierList,
+                        scanner_used,
                 ):
         super(AnonWidget, self).__init__()
         uic.loadUi(aux.resource_path("auxFiles/anon.ui"),self)
@@ -38,6 +33,7 @@ class AnonWidget(QWidget):
         self.loadLoadingIcons()
         self.loadFilters(*filterList)
         self.loadAnonymizers(*deidentifierList)
+        self.scanner_used = scanner_used
 
         #BUTTON ASIGNATION
         self.buttonAssignation()
@@ -131,7 +127,7 @@ class AnonWidget(QWidget):
         self.progressBarDocuments.show()
         self.addDocumentsButton.hide()
         self.mainWindow.stop_interaction(True)
-        self.worker = aux.ScanAndFilterDocumentsThread(fileNames)
+        self.worker = aux.ScanAndFilterDocumentsThread(fileNames, self.scanner_used)
         self.worker.worker_complete.connect(self.finishedAddingDocuments)
         self.worker.update_progress.connect(self.updateProgressAddingDocuments)
         self.worker.start()
@@ -221,7 +217,7 @@ class AnonWidget(QWidget):
 
         self.exportFiltersChecks = []
         for category in self.mainWindow.projectLoaded[list(self.mainWindow.projectLoaded.keys())[0]].keys():
-            if category != "raw" and category != "deidentified":
+            if type(self.mainWindow.projectLoaded[list(self.mainWindow.projectLoaded.keys())[0]][category]) == dict:
                 item = QListWidgetItem(category, dialog.filterSelector)
                 self.exportFiltersChecks.append(item)
                 item.setCheckState(2)

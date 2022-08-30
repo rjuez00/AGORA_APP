@@ -1,5 +1,5 @@
 from PyQt5.QtCore import pyqtSignal, QThread
-import re, fitz, cgitb, codecs, os, sys
+import re, cgitb, os, sys, ocr
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from pathos.multiprocessing import ProcessingPool as Pool
@@ -15,31 +15,10 @@ def reemplazos(text,args=None):
     return text
 
 
-def clean_encoding_PN(text, encoding = "latin-1"):
-    text = codecs.encode(text, encoding = encoding, errors = "ignore")
-    text = codecs.decode(text, encoding=encoding, errors = "ignore")
 
-    for bad_char in [u"\uF0D7", u"\uFFFD", u"\uf020", u"\uF0B2", u"\u61613", '\u262d']:
-        text = text.replace(bad_char, "")
-    
-    return text.replace("\n", "   ")
 
 
 ################# SCANNING DOCUMENTS #################
-
-def scan_PDF_PN(filename):
-    text = ""
-    with fitz.open(filename) as doc:
-        for page in doc:
-            text += page.getText()
-    return clean_encoding_PN(text)
-
-def scan_TXT_MEDDOCAN(filename):
-    text = ""
-    with open(filename, "r", encoding="utf-8") as file:
-        text = file.read()
-        #text = codecs.decode(text, encoding="utf-8", errors = "ignore")
-        return text
 
 
 
@@ -47,7 +26,7 @@ class ScanDocumentsThread(QThread):
     update_progress = pyqtSignal(int)
     worker_complete = pyqtSignal(dict)
 
-    def __init__(self, filenames, scanner_to_use = scan_PDF_PN, parent = None):
+    def __init__(self, filenames, scanner_to_use = ocr.scan_PDF_PN, parent = None):
         super(ScanDocumentsThread, self).__init__(parent)
         self.scanner_to_use = scanner_to_use
         self.filenames = filenames
@@ -57,13 +36,13 @@ class ScanDocumentsThread(QThread):
         docs = {}
         cuantDocs = len(self.filenames)
         for idx, filename in enumerate(self.filenames):
-            texto = self.scanner_to_use(filename)
+            texto, hasOCR = self.scanner_to_use(filename)
             #print("ESCANEANDO ", filename, "CHECKS:", texto != "", texto.isspace)
             
 
 
             if texto != "" and texto.isspace() == False:
-                docs[filename.split("/")[-1]] = {"raw": texto} 
+                docs[filename.split("/")[-1]] = {"raw": texto, "hasOCR": hasOCR} 
                 self.update_progress.emit(100 * ((1+idx)/cuantDocs))
 
             else:
@@ -76,9 +55,10 @@ class ScanAndFilterDocumentsThread(QThread):
     update_progress = pyqtSignal(int)
     worker_complete = pyqtSignal(dict)
 
-    def __init__(self, filenames, parent = None):
+    def __init__(self, filenames, scanner_to_use = ocr.scan_PDF_PN, parent = None):
         super(ScanAndFilterDocumentsThread, self).__init__(parent)
         self.filenames = filenames
+        self.scanner_to_use = scanner_to_use
 
     def run(self):
         self.update_progress.emit(5)
@@ -86,7 +66,7 @@ class ScanAndFilterDocumentsThread(QThread):
         cuantDocs = len(self.filenames)
         for idx, filename in enumerate(self.filenames):
             print("ESCANEANDO ", filename)
-            scannedText = scan_text(filename)
+            scannedText = self.scanner_to_use(filename)
             if scannedText == None:
                 scannedText = ""
            

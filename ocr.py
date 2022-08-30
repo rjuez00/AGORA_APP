@@ -1,7 +1,7 @@
 # Useful libraries
 from pdf2image import convert_from_path
 from pytesseract import image_to_string
-import tqdm, os, codecs
+import tqdm, fitz, codecs
 
 def convert_pdf_to_img(pdf_file):
     """
@@ -61,8 +61,39 @@ def clean_encoding(text, encoding = "latin-1"):
     
     return text.replace("\n", "   ")
 
+
+def scan_PDF_PN(filename):
+    text = ""
+    with fitz.open(filename) as doc:
+        for page in doc:
+            text += page.getText()
+    return clean_encoding(text), None
+
+
 def scan_PDF_OCR_GC(filename):
-    return get_text_from_any_pdf(filename) 
+    return get_text_from_any_pdf(filename) , None
 
 
+def scan_PDF_COMBINE_OCR_TEXT(filename):
+    text = ""
+    with fitz.open(filename) as doc:
+        for page in doc:
+            text += page.getText()
+    
+    typeofdoc = True
+    if text.isspace() or text == "":
+        print("No text found in {}... performing OCR".format(filename))
+        text = get_text_from_any_pdf(filename)
+    else:
+        print("Text found in {}... skipping OCR".format(filename))
+        text = clean_encoding(text)
+        typeofdoc = False
+   
+    return text, typeofdoc
 
+def scan_TXT_MEDDOCAN(filename):
+    text = ""
+    with open(filename, "r", encoding="utf-8") as file:
+        text = file.read()
+        #text = codecs.decode(text, encoding="utf-8", errors = "ignore")
+        return text, None

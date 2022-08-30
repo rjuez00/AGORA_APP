@@ -28,7 +28,7 @@ class MainWindow(QMainWindow):
         self.projectLoaded = projectLoaded
 
         
-        self.tabWidgetList = {"Anonimizator": AnonWidget(self, domainIndex[domain]["filterList"], domainIndex[domain]["deidentifierList"]), "Geotool": GeoWidget(self), }
+        self.tabWidgetList = {"Anonimizator": AnonWidget(self, domainIndex[domain]["filterList"], domainIndex[domain]["deidentifierList"], domainIndex[domain]["scanner"]), "Geotool": GeoWidget(self), }
         
         
         self.tabsOrder = []     
