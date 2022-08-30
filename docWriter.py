@@ -75,6 +75,14 @@ def single_sheet(projectLoaded, dumpOffsets, categories_to_dump, fileDirectory):
     
     a.to_excel(fileDirectory + ".xlsx")
 
+def table_dumper(stream, table, table_name):
+    from sqlalchemy import create_engine    
+    engine = create_engine('sqlite://', echo=False)
+    table.to_sql(name=table_name, con=engine)  # reset_index() is needed to preserve index column in dumped data
+    with engine.connect() as conn:
+        for line in conn.connection.iterdump():
+            stream.write(line)
+            stream.write('\n')
 
 def sql_writer(projectLoaded, dumpOffsets, categories_to_dump, fileDirectory):
     # https://sqliteonline.com/syntax/create_table/
@@ -83,16 +91,11 @@ def sql_writer(projectLoaded, dumpOffsets, categories_to_dump, fileDirectory):
 
     a = pd.DataFrame({"documentNames" : list(projectLoaded.keys()), "contents": list(projectLoaded.keys()),  "contents2": list(projectLoaded.keys())})
     a.set_index("documentNames", inplace=True)
-    print(a.loc["0500_Caso_C0740394_obj_78677408.PDF"])
-    
+
+
+
     with open(fileDirectory, "w") as file:
-        from sqlalchemy import create_engine    
-        engine = create_engine('sqlite://', echo=False)
-        a.to_sql(name="table_name", con=engine)  # reset_index() is needed to preserve index column in dumped data
-        with engine.connect() as conn:
-            for line in conn.connection.iterdump():
-                file.write(line)
-                file.write('\n')
+        table_dumper(file, a, "NOMBRE_TABLA")
 
 
 
