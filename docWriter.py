@@ -5,7 +5,7 @@ from docx.shared import RGBColor, Inches, Cm
 
 def sheet_per_document(projectLoaded, dumpOffsets, categories_to_dump, fileDirectory):   
     default_filters = [key for key, contents in projectLoaded[list(projectLoaded.keys())[0]].items() if type(contents) == dict and key in categories_to_dump]
-    writer = pd.ExcelWriter(fileDirectory, engine='xlsxwriter')
+    writer = pd.ExcelWriter(fileDirectory + ".xlsx", engine='xlsxwriter')
 
 
     for documentName in projectLoaded.keys():
@@ -42,8 +42,6 @@ def sheet_per_document(projectLoaded, dumpOffsets, categories_to_dump, fileDirec
 
     writer.save()
 
-
-
 def single_sheet(projectLoaded, dumpOffsets, categories_to_dump, fileDirectory):   
     default_filters = [key for key, contents in projectLoaded[list(projectLoaded.keys())[0]].items() if type(contents) == dict and key in categories_to_dump]
     multiindex = []
@@ -75,12 +73,34 @@ def single_sheet(projectLoaded, dumpOffsets, categories_to_dump, fileDirectory):
                 if dumpOffsets == True:
                     a.loc[(documentName, "index")  ,   (filterName, idx+1)] = f"{startidx} - {endidx}"
     
-    a.to_excel(fileDirectory)
+    a.to_excel(fileDirectory + ".xlsx")
+
+
+def sql_writer(projectLoaded, dumpOffsets, categories_to_dump, fileDirectory):
+    # https://sqliteonline.com/syntax/create_table/
+    fileDirectory += ".sql"
+    default_filters = [key for key, contents in projectLoaded[list(projectLoaded.keys())[0]].items() if type(contents) == dict and key in categories_to_dump]
+
+    a = pd.DataFrame({"documentNames" : list(projectLoaded.keys()), "contents": list(projectLoaded.keys()),  "contents2": list(projectLoaded.keys())})
+    a.set_index("documentNames", inplace=True)
+    print(a.loc["0500_Caso_C0740394_obj_78677408.PDF"])
+    
+    with open(fileDirectory, "w") as file:
+        from sqlalchemy import create_engine    
+        engine = create_engine('sqlite://', echo=False)
+        a.to_sql(name="table_name", con=engine)  # reset_index() is needed to preserve index column in dumped data
+        with engine.connect() as conn:
+            for line in conn.connection.iterdump():
+                file.write(line)
+                file.write('\n')
+
+
 
 
 def excelWriterFunction(dumper, projectLoaded, directorySave, dumpOffsets, categories_to_dump, finishingfunction):
     dumper(projectLoaded, dumpOffsets, categories_to_dump, directorySave)
     finishingfunction()
+
 
 def wordWriterFunction(word_function, projectLoaded, directorySave, finishingfunction):
     if not os.path.exists(directorySave):
@@ -90,6 +110,7 @@ def wordWriterFunction(word_function, projectLoaded, directorySave, finishingfun
         word_function(documentName, documentContents["deidentified"], directorySave + "/" + documentName.split(".PDF")[0] + ".docx")
     
     finishingfunction()
+
 
 def replace_with_category_word(filename, target, directory_save):
     red = RGBColor(0xFF, 0x0, 0x0)
@@ -136,6 +157,7 @@ def replace_with_category_word(filename, target, directory_save):
         paragraphWord.add_run(paragraphText[pointerText:])     
    
     document.save(directory_save)
+
 
 def remove_completely_word(filename, target, directory_save):
     red = RGBColor(0xFF, 0x0, 0x0)
@@ -186,6 +208,7 @@ def remove_completely_word(filename, target, directory_save):
         paragraphWord.add_run(paragraphText[pointerText:])     
    
     document.save(directory_save)
+
 
 def replace_with_x_word(filename, target, directory_save):
     red = RGBColor(0xFF, 0x0, 0x0)

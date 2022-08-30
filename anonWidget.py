@@ -42,7 +42,7 @@ class AnonWidget(QWidget):
         #BUTTON ASIGNATION
         self.buttonAssignation()
 
-        self.excelFormats = {"Excel: Sheet per document": tbw.sheet_per_document, "Excel: Single sheet": tbw.single_sheet, "SQL: Relational Tables": tbw.sheet_per_document}
+        self.excelFormats = {"SQL: Relational Tables": tbw.sql_writer, "Excel: Sheet per document": tbw.sheet_per_document, "Excel: Single sheet": tbw.single_sheet}
         self.outputFormatSelector.clear()
         for format_name in self.excelFormats:
             self.outputFormatSelector.addItem(format_name)
@@ -166,7 +166,7 @@ class AnonWidget(QWidget):
         excelDirectory = QFileDialog.getExistingDirectory(self, caption = "Where do you want to export the filters? (Excel file)")
         if(excelDirectory == ""):
             return
-        excelFilename = self.mainWindow.projectNameWidget.text().split(".")[0] + ".xlsx"
+        excelFilename = self.mainWindow.projectNameWidget.text().split(".")[0] 
         self.directoryExcelLineEdit.setText(excelDirectory + "/" +  excelFilename)
 
     def finalThreadFilterFunction(self):           
