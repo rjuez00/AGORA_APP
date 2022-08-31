@@ -89,13 +89,23 @@ def sql_writer(projectLoaded, dumpOffsets, categories_to_dump, fileDirectory):
     fileDirectory += ".sql"
     default_filters = [key for key, contents in projectLoaded[list(projectLoaded.keys())[0]].items() if type(contents) == dict and key in categories_to_dump]
 
-    a = pd.DataFrame({"documentNames" : list(projectLoaded.keys()), "contents": list(projectLoaded.keys()),  "contents2": list(projectLoaded.keys())})
-    a.set_index("documentNames", inplace=True)
+    columns = ["documentName", "entity", "startidx", "endidx"] if dumpOffsets == True else ["documentName", "entity"]
+    filterTables = {filterName : pd.DataFrame(columns = columns) for filterName in default_filters}
 
+    for documentName in projectLoaded.keys():
+        for filterName in default_filters:
+            for startidx, (endidx, entityText) in projectLoaded[documentName][filterName].items():
+                toAppend = {"documentName": [documentName] , "entity" : [entityText], "startidx" : [int(startidx)], "endidx" : [int(endidx)]} if dumpOffsets == True else {"documentName":[documentName], "entity" : [entityText]}
+                toAppend = pd.DataFrame(toAppend)
+                filterTables[filterName] = pd.concat([filterTables[filterName], toAppend])
+                
+              
 
 
     with open(fileDirectory, "w") as file:
-        table_dumper(file, a, "NOMBRE_TABLA")
+        for filter_name, table in filterTables.items():
+            table_dumper(file, table, filter_name)
+            file.write("\n")
 
 
 
