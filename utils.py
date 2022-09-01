@@ -1,5 +1,5 @@
 from PyQt5.QtCore import pyqtSignal, QThread
-import re, cgitb, os, sys, ocr
+import re, cgitb, os, sys
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from pathos.multiprocessing import ProcessingPool as Pool
@@ -26,7 +26,7 @@ class ScanDocumentsThread(QThread):
     update_progress = pyqtSignal(int)
     worker_complete = pyqtSignal(dict)
 
-    def __init__(self, filenames, scanner_to_use = ocr.scan_PDF_PN, parent = None):
+    def __init__(self, filenames, scanner_to_use, parent = None):
         super(ScanDocumentsThread, self).__init__(parent)
         self.scanner_to_use = scanner_to_use
         self.filenames = filenames
@@ -55,7 +55,7 @@ class ScanAndFilterDocumentsThread(QThread):
     update_progress = pyqtSignal(int)
     worker_complete = pyqtSignal(dict)
 
-    def __init__(self, filenames, scanner_to_use = ocr.scan_PDF_PN, parent = None):
+    def __init__(self, filenames, scanner_to_use, parent = None):
         super(ScanAndFilterDocumentsThread, self).__init__(parent)
         self.filenames = filenames
         self.scanner_to_use = scanner_to_use

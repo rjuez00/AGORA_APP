@@ -26,6 +26,7 @@ OutputBaseFilename=mysetup
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
+DiskSpanning=yes
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"

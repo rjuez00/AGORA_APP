@@ -207,7 +207,7 @@ class AnonWidget(QWidget):
         self.loadingIconFilter.start()
 
 
-        DumpFilterSelector = uic.loadUiType("auxFiles/dumpFilterSelector.ui")[0]
+        DumpFilterSelector = uic.loadUiType(aux.resource_path("auxFiles/dumpFilterSelector.ui"))[0]
 
         class QDialogClass(QDialog, DumpFilterSelector):
             def __init__(self, parent=None):

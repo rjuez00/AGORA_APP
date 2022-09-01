@@ -1,7 +1,9 @@
 # Useful libraries
-from pdf2image import convert_from_path
+from pdf2image import convert_from_path 
 from pytesseract import image_to_string
-import tqdm, fitz, codecs
+import tqdm, fitz, codecs, pytesseract, utils
+
+pytesseract.pytesseract.tesseract_cmd = utils.resource_path("auxFiles/tesseract/tesseract.exe")
 
 def convert_pdf_to_img(pdf_file):
     """
@@ -9,7 +11,7 @@ def convert_pdf_to_img(pdf_file):
     
     @params:
         - pdf_file: the file to be converted
-    
+    pu
     @returns:
         - an interable containing image format of all the pages of the PDF
     """

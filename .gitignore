@@ -1,8 +1,9 @@
 installationScripts/Executable
 installationScripts/Output
+installationScripts/old
 documentosPDF/
 auxFiles/*.pt
-
+auxFiles/tesseract
 
 
 # Byte-compiled / optimized / DLL files
