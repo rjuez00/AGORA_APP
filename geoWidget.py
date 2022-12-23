@@ -8,7 +8,7 @@ import json
 from statMap import Statmap
 from threading import Thread
 import matplotlib
-callesFilter = "CALLE"
+callesFilter = ["CALLE", "NOMBRE_CALLE"]
 import utils
 from geocoding import finalAmenityDict
 
@@ -59,7 +59,12 @@ class GeoWidget(QWidget):
 
         self.callesList.clear()
         self.streetChecks = []
-        for _, (_, calle) in self.mainWindow.projectLoaded[selectedDocument][callesFilter].items():
+        targetDocument =  self.mainWindow.projectLoaded[selectedDocument].get(callesFilter[0], None)
+        if targetDocument == None:
+            targetDocument =  self.mainWindow.projectLoaded[selectedDocument].get(callesFilter[1], None)
+
+            
+        for _, (_, calle) in targetDocument.items():
             item = QListWidgetItem(calle, self.callesList)
             self.streetChecks.append(item)
             item.setCheckState(2)
@@ -69,7 +74,7 @@ class GeoWidget(QWidget):
     
     def hasGeoFilters(self):
         sampleDoc = self.mainWindow.projectLoaded[list(self.mainWindow.projectLoaded.keys())[0]]
-        return sampleDoc.get(callesFilter, None) != None
+        return (sampleDoc.get(callesFilter[0], None) != None) or (sampleDoc.get(callesFilter[1], None) != None)
 
     def geoFiltersWarning(self):
         if not self.hasGeoFilters():
