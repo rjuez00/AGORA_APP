@@ -162,6 +162,7 @@ class AnonWidget(QWidget):
         excelDirectory = QFileDialog.getExistingDirectory(self, caption = "Where do you want to export the filters? (Excel file)")
         if(excelDirectory == ""):
             return
+
         excelFilename = self.mainWindow.projectNameWidget.text().split(".")[0] 
         self.directoryExcelLineEdit.setText(excelDirectory + "/" +  excelFilename)
 
